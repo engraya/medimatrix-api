@@ -6,6 +6,8 @@ coverage/
 !.env.example
 !.env.test
 storage/
+!src/lib/storage/
+!src/lib/storage/**
 backups/
 *.log
 *.dump
