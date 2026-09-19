@@ -32,6 +32,26 @@
             "pathParams": [],
             "auth": { "type": "none" },
             "body": { "type": "none" }
+          },
+          {
+            "name": "Live (root alias)",
+            "method": "GET",
+            "url": "{{serverUrl}}/health/live",
+            "headers": [],
+            "queryParams": [],
+            "pathParams": [],
+            "auth": { "type": "none" },
+            "body": { "type": "none" }
+          },
+          {
+            "name": "Ready (root alias)",
+            "method": "GET",
+            "url": "{{serverUrl}}/health/ready",
+            "headers": [],
+            "queryParams": [],
+            "pathParams": [],
+            "auth": { "type": "none" },
+            "body": { "type": "none" }
           }
         ]
       },
@@ -654,6 +674,7 @@
         "isLocalOnly": true,
         "variables": [
           { "name": "baseUrl", "value": "http://localhost:4000/api/v1", "isSecret": false },
+          { "name": "serverUrl", "value": "http://localhost:4000", "isSecret": false },
           { "name": "adminEmail", "value": "", "isSecret": false },
           { "name": "adminPassword", "value": "", "isSecret": true },
           { "name": "userId", "value": "00000000-0000-0000-0000-000000000000", "isSecret": false },
