@@ -1,3 +1,5 @@
+/// <reference types="node" />
+
 // Copy into the Next.js frontend's lib/api directory when ready to integrate.
 // Browser-only. Server Components must explicitly forward cookies to the API.
 export interface Envelope<T> {
