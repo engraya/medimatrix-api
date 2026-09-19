@@ -35,5 +35,5 @@ jobs:
       - run: npm run build
       - run: npm run docs:api
       - run: npm audit --omit=dev --audit-level=high
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with: { name: openapi, path: docs/api/openapi.json }
