@@ -1,0 +1,6 @@
+pre-commit:
+  commands:
+    secrets:
+      run: gitleaks protect --staged --redact
+    lint:
+      run: npm run lint

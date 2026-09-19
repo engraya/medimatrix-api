@@ -1,0 +1,74 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    shm_size: 256mb
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:?required}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?required}
+      POSTGRES_DB: ${POSTGRES_DB:?required}
+    volumes: [postgres_data:/var/lib/postgresql/data]
+    networks: [private]
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB']
+      interval: 5s
+      timeout: 3s
+      retries: 20
+  migrate:
+    image: ${MIGRATE_IMAGE:?required}
+    profiles: [tools]
+    env_file: ${RUNTIME_ENV_FILE:?required}
+    environment: { POSTGRES_HOST: postgres, POSTGRES_PORT: 5432 }
+    networks: [private]
+    depends_on:
+      postgres: { condition: service_healthy }
+  api:
+    image: ${API_IMAGE:?required}
+    restart: unless-stopped
+    init: true
+    env_file: ${RUNTIME_ENV_FILE:?required}
+    environment:
+      NODE_ENV: production
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      TRUST_PROXY: 1
+      COOKIE_SECURE: 'true'
+    networks: [private, public]
+    depends_on:
+      postgres: { condition: service_healthy }
+    read_only: true
+    tmpfs: [/tmp]
+    security_opt: [no-new-privileges:true]
+    cap_drop: [ALL]
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    environment: { API_DOMAIN: '${API_DOMAIN:?required}' }
+    ports: ['80:80', '443:443']
+    volumes:
+      - ./docker/caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    networks: [public]
+    depends_on: [api]
+  backup:
+    build: ./docker/backup
+    restart: unless-stopped
+    env_file: ${RUNTIME_ENV_FILE:?required}
+    environment:
+      PGHOST: postgres
+      PGPORT: 5432
+      PGUSER: ${POSTGRES_USER:?required}
+      PGPASSWORD: ${POSTGRES_PASSWORD:?required}
+      PGDATABASE: ${POSTGRES_DB:?required}
+      BACKUP_S3_URI: ${BACKUP_S3_URI:?required}
+    networks: [private, public]
+    depends_on:
+      postgres: { condition: service_healthy }
+networks:
+  private: { internal: true }
+  public:
+volumes:
+  postgres_data:
+  caddy_data:
+  caddy_config:

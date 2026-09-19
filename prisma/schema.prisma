@@ -1,0 +1,266 @@
+generator client {
+  provider = "prisma-client-js"
+}
+datasource db {
+  provider = "postgresql"
+}
+
+enum UserRole {
+  PATIENT
+  STAFF
+  ADMIN
+}
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+enum AppointmentStatus {
+  PENDING
+  SCHEDULED
+  CANCELLED
+}
+enum IdentificationType {
+  BIRTH_CERTIFICATE
+  DRIVERS_LICENSE
+  MEDICAL_INSURANCE_CARD
+  MILITARY_ID
+  NATIONAL_ID
+  PASSPORT
+  RESIDENT_ALIEN_CARD
+  SOCIAL_SECURITY_CARD
+  STATE_ID
+  STUDENT_ID
+  VOTER_ID
+}
+enum NotificationType {
+  APPOINTMENT_REQUESTED
+  APPOINTMENT_SCHEDULED
+  APPOINTMENT_CANCELLED
+  WELCOME
+  EMAIL_VERIFICATION
+  PASSWORD_RESET
+  OTP
+  STAFF_INVITE
+}
+enum NotificationChannel {
+  IN_APP
+  EMAIL
+  SMS
+}
+enum DeliveryStatus {
+  PENDING
+  PROCESSING
+  SENT
+  FAILED
+  SKIPPED
+}
+enum VerificationPurpose {
+  EMAIL_VERIFY
+  PASSWORD_RESET
+  LOGIN_OTP
+  PHONE_VERIFY
+}
+
+model User {
+  id              String    @id @default(uuid()) @db.Uuid
+  email           String    @unique @db.Citext
+  phone           String    @unique
+  name            String
+  role            UserRole  @default(PATIENT)
+  sessionVersion  Int       @default(0) @map("session_version")
+  loginFailures   Int       @default(0) @map("login_failures")
+  lockedUntil     DateTime? @map("locked_until")
+  loginWindowAt   DateTime? @map("login_window_at")
+  passwordHash    String?   @map("password_hash")
+  emailVerifiedAt DateTime? @map("email_verified_at")
+  phoneVerifiedAt DateTime? @map("phone_verified_at")
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+  deletedAt       DateTime? @map("deleted_at")
+  patient          Patient?
+  files            File[]
+  refreshTokens    RefreshToken[]
+  verifications    VerificationToken[]
+  notifications    Notification[]
+  preferences      NotificationPreference[]
+  scheduledAppts   Appointment[] @relation("ScheduledBy")
+  cancelledAppts   Appointment[] @relation("CancelledBy")
+  auditLogs        AuditLog[]
+  @@index([role])
+  @@map("users")
+}
+
+model Patient {
+  id                       String   @id @default(uuid()) @db.Uuid
+  userId                   String   @unique @map("user_id") @db.Uuid
+  user                     User     @relation(fields: [userId], references: [id], onDelete: Restrict)
+  birthDate                DateTime @map("birth_date") @db.Date
+  gender                   Gender
+  address                  String
+  occupation               String
+  emergencyContactName     String   @map("emergency_contact_name")
+  emergencyContactNumber   String   @map("emergency_contact_number")
+  primaryDoctorId          String?  @map("primary_doctor_id") @db.Uuid
+  primaryDoctor            Doctor?  @relation(fields: [primaryDoctorId], references: [id], onDelete: SetNull)
+  insuranceProvider        String   @map("insurance_provider")
+  insurancePolicyNumber    String   @map("insurance_policy_number")
+  allergies                String?
+  currentMedication        String?  @map("current_medication")
+  familyMedicalHistory     String?  @map("family_medical_history")
+  pastMedicalHistory       String?  @map("past_medical_history")
+  identificationType       IdentificationType? @map("identification_type")
+  identificationNumber     String?  @map("identification_number")
+  identificationDocumentId String?  @unique @map("identification_document_id") @db.Uuid
+  identificationDocument   File?    @relation(fields: [identificationDocumentId], references: [id], onDelete: SetNull)
+  treatmentConsentAt       DateTime @map("treatment_consent_at")
+  disclosureConsentAt      DateTime @map("disclosure_consent_at")
+  privacyConsentAt         DateTime @map("privacy_consent_at")
+  createdAt                DateTime @default(now()) @map("created_at")
+  updatedAt                DateTime @updatedAt @map("updated_at")
+  deletedAt                DateTime? @map("deleted_at")
+  appointments             Appointment[]
+  @@index([primaryDoctorId])
+  @@map("patients")
+}
+
+model Doctor {
+  id        String   @id @default(uuid()) @db.Uuid
+  name      String
+  slug      String   @unique
+  imageUrl  String   @map("image_url")
+  specialty String?
+  isActive  Boolean  @default(true) @map("is_active")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  patients     Patient[]
+  appointments Appointment[]
+  @@index([isActive])
+  @@map("doctors")
+}
+
+model Appointment {
+  id                 String            @id @default(uuid()) @db.Uuid
+  patientId          String            @map("patient_id") @db.Uuid
+  patient            Patient           @relation(fields: [patientId], references: [id], onDelete: Restrict)
+  doctorId           String            @map("doctor_id") @db.Uuid
+  doctor             Doctor            @relation(fields: [doctorId], references: [id], onDelete: Restrict)
+  schedule           DateTime          @db.Timestamptz(3)
+  status             AppointmentStatus @default(PENDING)
+  reason             String
+  note               String?
+  cancellationReason String?           @map("cancellation_reason")
+  scheduledAt        DateTime?         @map("scheduled_at")
+  scheduledById      String?           @map("scheduled_by_id") @db.Uuid
+  scheduledBy        User?             @relation("ScheduledBy", fields: [scheduledById], references: [id], onDelete: SetNull)
+  cancelledAt        DateTime?         @map("cancelled_at")
+  cancelledById      String?           @map("cancelled_by_id") @db.Uuid
+  cancelledBy        User?             @relation("CancelledBy", fields: [cancelledById], references: [id], onDelete: SetNull)
+  createdAt          DateTime          @default(now()) @map("created_at")
+  updatedAt          DateTime          @updatedAt @map("updated_at")
+  @@index([patientId, schedule])
+  @@index([status, schedule])
+  @@index([doctorId, schedule])
+  @@index([createdAt(sort: Desc)])
+  @@map("appointments")
+}
+
+model File {
+  id             String   @id @default(uuid()) @db.Uuid
+  ownerUserId    String   @map("owner_user_id") @db.Uuid
+  owner          User     @relation(fields: [ownerUserId], references: [id], onDelete: Cascade)
+  bucket         String
+  storageKey     String   @unique @map("storage_key")
+  originalName   String   @map("original_name")
+  mimeType       String   @map("mime_type")
+  sizeBytes      Int      @map("size_bytes")
+  checksumSha256 String   @map("checksum_sha256")
+  createdAt      DateTime @default(now()) @map("created_at")
+  patient        Patient?
+  @@index([ownerUserId])
+  @@map("files")
+}
+
+model RefreshToken {
+  id           String    @id @default(uuid()) @db.Uuid
+  userId       String    @map("user_id") @db.Uuid
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tokenHash    String    @unique @map("token_hash")
+  familyId     String    @map("family_id") @db.Uuid
+  expiresAt    DateTime  @map("expires_at")
+  revokedAt    DateTime? @map("revoked_at")
+  replacedById String?   @map("replaced_by_id") @db.Uuid
+  userAgent    String?   @map("user_agent")
+  ip           String?
+  createdAt    DateTime  @default(now()) @map("created_at")
+  @@index([userId])
+  @@index([familyId])
+  @@map("refresh_tokens")
+}
+
+model VerificationToken {
+  id         String              @id @default(uuid()) @db.Uuid
+  userId     String              @map("user_id") @db.Uuid
+  user       User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  purpose    VerificationPurpose
+  codeHash   String              @map("code_hash")
+  expiresAt  DateTime            @map("expires_at")
+  consumedAt DateTime?           @map("consumed_at")
+  attempts   Int                 @default(0)
+  createdAt  DateTime            @default(now()) @map("created_at")
+  @@index([userId, purpose])
+  @@index([expiresAt])
+  @@map("verification_tokens")
+}
+
+model Notification {
+  id           String              @id @default(uuid()) @db.Uuid
+  userId       String              @map("user_id") @db.Uuid
+  user         User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type         NotificationType
+  channel      NotificationChannel
+  title        String
+  body         String
+  data         Json?
+  dedupeKey    String              @unique @map("dedupe_key")
+  status       DeliveryStatus      @default(PENDING)
+  attempts     Int                 @default(0)
+  claimedAt    DateTime?           @map("claimed_at")
+  claimId      String?             @map("claim_id") @db.Uuid
+  lastError    String?             @map("last_error")
+  scheduledFor DateTime            @default(now()) @map("scheduled_for")
+  sentAt       DateTime?           @map("sent_at")
+  readAt       DateTime?           @map("read_at")
+  createdAt    DateTime            @default(now()) @map("created_at")
+  @@index([userId, readAt])
+  @@index([status, scheduledFor])
+  @@map("notifications")
+}
+
+model NotificationPreference {
+  userId  String              @map("user_id") @db.Uuid
+  user    User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type    NotificationType
+  channel NotificationChannel
+  enabled Boolean             @default(true)
+  @@id([userId, type, channel])
+  @@map("notification_preferences")
+}
+
+model AuditLog {
+  id          String   @id @default(uuid()) @db.Uuid
+  actorUserId String?  @map("actor_user_id") @db.Uuid
+  actor       User?    @relation(fields: [actorUserId], references: [id], onDelete: SetNull)
+  action      String
+  entityType  String   @map("entity_type")
+  entityId    String   @map("entity_id")
+  before      Json?
+  after       Json?
+  requestId   String?  @map("request_id")
+  ip          String?
+  createdAt   DateTime @default(now()) @map("created_at")
+  @@index([entityType, entityId])
+  @@index([actorUserId])
+  @@index([createdAt])
+  @@map("audit_logs")
+}
