@@ -1,0 +1,693 @@
+{
+  "meta": {
+    "format": "httpie",
+    "version": "1.0.0",
+    "contentType": "workspace",
+    "source": "MediMatrix API",
+    "docs": "https://httpie.io/docs/desktop/import"
+  },
+  "entry": {
+    "name": "MediMatrix API",
+    "collections": [
+      {
+        "name": "Health",
+        "auth": { "type": "none" },
+        "requests": [
+          {
+            "name": "Live",
+            "method": "GET",
+            "url": "{{baseUrl}}/health/live",
+            "headers": [],
+            "queryParams": [],
+            "pathParams": [],
+            "auth": { "type": "none" },
+            "body": { "type": "none" }
+          },
+          {
+            "name": "Ready",
+            "method": "GET",
+            "url": "{{baseUrl}}/health/ready",
+            "headers": [],
+            "queryParams": [],
+            "pathParams": [],
+            "auth": { "type": "none" },
+            "body": { "type": "none" }
+          }
+        ]
+      },
+      {
+        "name": "Authentication",
+        "auth": { "type": "none" },
+        "requests": [
+          {
+            "name": "Staff login",
+            "method": "POST",
+            "url": "{{baseUrl}}/auth/login",
+            "headers": [{ "name": "X-Requested-With", "value": "fetch", "enabled": true }],
+            "queryParams": [],
+            "pathParams": [],
+            "auth": { "type": "none" },
+            "body": {
+              "type": "text",
+              "text": {
+                "format": "application/json",
+                "value": "{\n  \"email\": \"{{adminEmail}}\",\n  \"password\": \"{{adminPassword}}\"\n}"
+              }
+            }
+          },
+          {
+            "name": "Refresh session",
+            "method": "POST",
+            "url": "{{baseUrl}}/auth/refresh",
+            "headers": [{ "name": "X-Requested-With", "value": "fetch", "enabled": true }],
+            "queryParams": [],
+            "pathParams": [],
+            "auth": { "type": "none" },
+            "body": { "type": "none" }
+          },
+          {
+            "name": "Logout",
+            "method": "POST",
+            "url": "{{baseUrl}}/auth/logout",
+            "headers": [{ "name": "X-Requested-With", "value": "fetch", "enabled": true }],
+            "queryParams": [],
+            "pathParams": [],
+            "auth": { "type": "none" },
+            "body": { "type": "none" }
+          },
+          {
+            "name": "Current identity",
+            "method": "GET",
+            "url": "{{baseUrl}}/auth/me",
+            "headers": [],
+            "queryParams": [],
+            "pathParams": [],
+            "auth": { "type": "none" },
+            "body": { "type": "none" }
+          },
+          {
+            "name": "Start patient OTP",
+            "method": "POST",
+            "url": "{{baseUrl}}/auth/patient/start",
+            "headers": [{ "name": "X-Requested-With", "value": "fetch", "enabled": true }],
+            "queryParams": [],
+            "pathParams": [],
+            "auth": { "type": "none" },
+            "body": {
+              "type": "text",
+              "text": {
+                "format": "application/json",
+                "value": "{\n  \"name\": \"Jane Patient\",\n  \"email\": \"jane.patient@example.com\",\n  \"phone\": \"+2348012345678\"\n}"
+              }
+            }
+          },
+          {
+            "name": "Verify patient OTP",
+            "method": "POST",
+            "url": "{{baseUrl}}/auth/patient/verify",
+            "headers": [{ "name": "X-Requested-With", "value": "fetch", "enabled": true }],
+            "queryParams": [],
+            "pathParams": [],
+            "auth": { "type": "none" },
+            "body": {
+              "type": "text",
+              "text": {
+                "format": "application/json",
+                "value": "{\n  \"userId\": \"{{userId}}\",\n  \"code\": \"{{patientOtp}}\"\n}"
+              }
+            }
+          },
+          {
+            "name": "Forgot password",
+            "method": "POST",
+            "url": "{{baseUrl}}/auth/forgot-password",
+            "headers": [{ "name": "X-Requested-With", "value": "fetch", "enabled": true }],
+            "queryParams": [],
+            "pathParams": [],
+            "auth": { "type": "none" },
+            "body": {
+              "type": "text",
+              "text": {
+                "format": "application/json",
+                "value": "{\n  \"email\": \"{{adminEmail}}\"\n}"
+              }
+            }
+          },
+          {
+            "name": "Reset password",
+            "method": "POST",
+            "url": "{{baseUrl}}/auth/reset-password",
+            "headers": [{ "name": "X-Requested-With", "value": "fetch", "enabled": true }],
+            "queryParams": [],
+            "pathParams": [],
+            "auth": { "type": "none" },
+            "body": {
+              "type": "text",
+              "text": {
+                "format": "application/json",
+                "value": "{\n  \"token\": \"{{resetToken}}\",\n  \"password\": \"NewPassword123!\"\n}"
+              }
+            }
+          },
+          {
+            "name": "Verify email",
+            "method": "POST",
+            "url": "{{baseUrl}}/auth/verify-email",
+            "headers": [{ "name": "X-Requested-With", "value": "fetch", "enabled": true }],
+            "queryParams": [],
+            "pathParams": [],
+            "auth": { "type": "none" },
+            "body": {
+              "type": "text",
+              "text": {
+                "format": "application/json",
+                "value": "{\n  \"token\": \"{{resetToken}}\"\n}"
+              }
+            }
+          },
+          {
+            "name": "Start phone verification",
+            "method": "POST",
+            "url": "{{baseUrl}}/auth/phone/start",
+            "headers": [{ "name": "X-Requested-With", "value": "fetch", "enabled": true }],
+            "queryParams": [],
+            "pathParams": [],
+            "auth": { "type": "none" },
+            "body": { "type": "none" }
+          },
+          {
+            "name": "Verify phone",
+            "method": "POST",
+            "url": "{{baseUrl}}/auth/phone/verify",
+            "headers": [{ "name": "X-Requested-With", "value": "fetch", "enabled": true }],
+            "queryParams": [],
+            "pathParams": [],
+            "auth": { "type": "none" },
+            "body": {
+              "type": "text",
+              "text": {
+                "format": "application/json",
+                "value": "{\n  \"code\": \"{{phoneOtp}}\"\n}"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "name": "Doctors",
+        "auth": { "type": "none" },
+        "requests": [
+          {
+            "name": "List active doctors",
+            "method": "GET",
+            "url": "{{baseUrl}}/doctors",
+            "headers": [],
+            "queryParams": [{ "name": "active", "value": "true", "enabled": true }],
+            "pathParams": [],
+            "auth": { "type": "none" },
+            "body": { "type": "none" }
+          },
+          {
+            "name": "Get doctor",
+            "method": "GET",
+            "url": "{{baseUrl}}/doctors/:doctorId",
+            "headers": [],
+            "queryParams": [],
+            "pathParams": [{ "name": "doctorId", "value": "{{doctorId}}", "enabled": true }],
+            "auth": { "type": "none" },
+            "body": { "type": "none" }
+          },
+          {
+            "name": "Create doctor",
+            "method": "POST",
+            "url": "{{baseUrl}}/doctors",
+            "headers": [{ "name": "X-Requested-With", "value": "fetch", "enabled": true }],
+            "queryParams": [],
+            "pathParams": [],
+            "auth": { "type": "none" },
+            "body": {
+              "type": "text",
+              "text": {
+                "format": "application/json",
+                "value": "{\n  \"name\": \"Dr. Ada Example\",\n  \"imageUrl\": \"https://example.com/doctors/ada.jpg\",\n  \"specialty\": \"Cardiology\",\n  \"isActive\": true\n}"
+              }
+            }
+          },
+          {
+            "name": "Update doctor",
+            "method": "PATCH",
+            "url": "{{baseUrl}}/doctors/:doctorId",
+            "headers": [{ "name": "X-Requested-With", "value": "fetch", "enabled": true }],
+            "queryParams": [],
+            "pathParams": [{ "name": "doctorId", "value": "{{doctorId}}", "enabled": true }],
+            "auth": { "type": "none" },
+            "body": {
+              "type": "text",
+              "text": {
+                "format": "application/json",
+                "value": "{\n  \"specialty\": \"Internal Medicine\"\n}"
+              }
+            }
+          },
+          {
+            "name": "Deactivate doctor",
+            "method": "DELETE",
+            "url": "{{baseUrl}}/doctors/:doctorId",
+            "headers": [{ "name": "X-Requested-With", "value": "fetch", "enabled": true }],
+            "queryParams": [],
+            "pathParams": [{ "name": "doctorId", "value": "{{doctorId}}", "enabled": true }],
+            "auth": { "type": "none" },
+            "body": { "type": "none" }
+          }
+        ]
+      },
+      {
+        "name": "Users",
+        "auth": { "type": "none" },
+        "requests": [
+          {
+            "name": "My profile",
+            "method": "GET",
+            "url": "{{baseUrl}}/users/me",
+            "headers": [],
+            "queryParams": [],
+            "pathParams": [],
+            "auth": { "type": "none" },
+            "body": { "type": "none" }
+          },
+          {
+            "name": "Update my profile",
+            "method": "PATCH",
+            "url": "{{baseUrl}}/users/me",
+            "headers": [{ "name": "X-Requested-With", "value": "fetch", "enabled": true }],
+            "queryParams": [],
+            "pathParams": [],
+            "auth": { "type": "none" },
+            "body": {
+              "type": "text",
+              "text": {
+                "format": "application/json",
+                "value": "{\n  \"name\": \"Jane Updated\",\n  \"phone\": \"+2348012345678\"\n}"
+              }
+            }
+          },
+          {
+            "name": "Search users",
+            "method": "GET",
+            "url": "{{baseUrl}}/users",
+            "headers": [],
+            "queryParams": [
+              { "name": "page", "value": "1", "enabled": true },
+              { "name": "limit", "value": "20", "enabled": true },
+              { "name": "role", "value": "STAFF", "enabled": true },
+              { "name": "q", "value": "doctor", "enabled": true }
+            ],
+            "pathParams": [],
+            "auth": { "type": "none" },
+            "body": { "type": "none" }
+          },
+          {
+            "name": "Invite staff",
+            "method": "POST",
+            "url": "{{baseUrl}}/users/staff",
+            "headers": [{ "name": "X-Requested-With", "value": "fetch", "enabled": true }],
+            "queryParams": [],
+            "pathParams": [],
+            "auth": { "type": "none" },
+            "body": {
+              "type": "text",
+              "text": {
+                "format": "application/json",
+                "value": "{\n  \"name\": \"Staff Example\",\n  \"email\": \"staff@example.com\",\n  \"phone\": \"+2348012345678\",\n  \"role\": \"STAFF\"\n}"
+              }
+            }
+          },
+          {
+            "name": "Change staff role",
+            "method": "PATCH",
+            "url": "{{baseUrl}}/users/:userId/role",
+            "headers": [{ "name": "X-Requested-With", "value": "fetch", "enabled": true }],
+            "queryParams": [],
+            "pathParams": [{ "name": "userId", "value": "{{userId}}", "enabled": true }],
+            "auth": { "type": "none" },
+            "body": {
+              "type": "text",
+              "text": { "format": "application/json", "value": "{\n  \"role\": \"STAFF\"\n}" }
+            }
+          }
+        ]
+      },
+      {
+        "name": "Patients",
+        "auth": { "type": "none" },
+        "requests": [
+          {
+            "name": "Register patient",
+            "method": "POST",
+            "url": "{{baseUrl}}/patients",
+            "headers": [{ "name": "X-Requested-With", "value": "fetch", "enabled": true }],
+            "queryParams": [],
+            "pathParams": [],
+            "auth": { "type": "none" },
+            "body": {
+              "type": "text",
+              "text": {
+                "format": "application/json",
+                "value": "{\n  \"birthDate\": \"1994-04-02\",\n  \"gender\": \"OTHER\",\n  \"address\": \"12 Example Road\",\n  \"occupation\": \"Engineer\",\n  \"emergencyContactName\": \"Example Contact\",\n  \"emergencyContactNumber\": \"+2348012345678\",\n  \"insuranceProvider\": \"Example Insurance\",\n  \"insurancePolicyNumber\": \"POLICY-123\",\n  \"treatmentConsent\": true,\n  \"disclosureConsent\": true,\n  \"privacyConsent\": true\n}"
+              }
+            }
+          },
+          {
+            "name": "My patient profile",
+            "method": "GET",
+            "url": "{{baseUrl}}/patients/me",
+            "headers": [],
+            "queryParams": [],
+            "pathParams": [],
+            "auth": { "type": "none" },
+            "body": { "type": "none" }
+          },
+          {
+            "name": "Search patients",
+            "method": "GET",
+            "url": "{{baseUrl}}/patients",
+            "headers": [],
+            "queryParams": [
+              { "name": "page", "value": "1", "enabled": true },
+              { "name": "limit", "value": "20", "enabled": true },
+              { "name": "q", "value": "Jane", "enabled": true },
+              { "name": "sort", "value": "-createdAt", "enabled": true }
+            ],
+            "pathParams": [],
+            "auth": { "type": "none" },
+            "body": { "type": "none" }
+          },
+          {
+            "name": "Get patient",
+            "method": "GET",
+            "url": "{{baseUrl}}/patients/:patientId",
+            "headers": [],
+            "queryParams": [],
+            "pathParams": [{ "name": "patientId", "value": "{{patientId}}", "enabled": true }],
+            "auth": { "type": "none" },
+            "body": { "type": "none" }
+          },
+          {
+            "name": "Update patient",
+            "method": "PATCH",
+            "url": "{{baseUrl}}/patients/:patientId",
+            "headers": [{ "name": "X-Requested-With", "value": "fetch", "enabled": true }],
+            "queryParams": [],
+            "pathParams": [{ "name": "patientId", "value": "{{patientId}}", "enabled": true }],
+            "auth": { "type": "none" },
+            "body": {
+              "type": "text",
+              "text": {
+                "format": "application/json",
+                "value": "{\n  \"occupation\": \"Senior Engineer\",\n  \"allergies\": \"No known allergies\"\n}"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "name": "Appointments",
+        "auth": { "type": "none" },
+        "requests": [
+          {
+            "name": "Request appointment",
+            "method": "POST",
+            "url": "{{baseUrl}}/appointments",
+            "headers": [{ "name": "X-Requested-With", "value": "fetch", "enabled": true }],
+            "queryParams": [],
+            "pathParams": [],
+            "auth": { "type": "none" },
+            "body": {
+              "type": "text",
+              "text": {
+                "format": "application/json",
+                "value": "{\n  \"doctorId\": \"{{doctorId}}\",\n  \"schedule\": \"2027-01-15T10:00:00.000Z\",\n  \"reason\": \"Routine consultation\",\n  \"note\": \"First visit\"\n}"
+              }
+            }
+          },
+          {
+            "name": "List appointments",
+            "method": "GET",
+            "url": "{{baseUrl}}/appointments",
+            "headers": [],
+            "queryParams": [
+              { "name": "page", "value": "1", "enabled": true },
+              { "name": "limit", "value": "20", "enabled": true },
+              { "name": "status", "value": "PENDING", "enabled": true },
+              { "name": "sort", "value": "-createdAt", "enabled": true }
+            ],
+            "pathParams": [],
+            "auth": { "type": "none" },
+            "body": { "type": "none" }
+          },
+          {
+            "name": "Dashboard totals",
+            "method": "GET",
+            "url": "{{baseUrl}}/appointments/stats",
+            "headers": [],
+            "queryParams": [
+              { "name": "from", "value": "2027-01-01T00:00:00.000Z", "enabled": true },
+              { "name": "to", "value": "2027-01-31T23:59:59.000Z", "enabled": true }
+            ],
+            "pathParams": [],
+            "auth": { "type": "none" },
+            "body": { "type": "none" }
+          },
+          {
+            "name": "Get appointment",
+            "method": "GET",
+            "url": "{{baseUrl}}/appointments/:appointmentId",
+            "headers": [],
+            "queryParams": [],
+            "pathParams": [
+              { "name": "appointmentId", "value": "{{appointmentId}}", "enabled": true }
+            ],
+            "auth": { "type": "none" },
+            "body": { "type": "none" }
+          },
+          {
+            "name": "Schedule appointment",
+            "method": "PATCH",
+            "url": "{{baseUrl}}/appointments/:appointmentId/schedule",
+            "headers": [{ "name": "X-Requested-With", "value": "fetch", "enabled": true }],
+            "queryParams": [],
+            "pathParams": [
+              { "name": "appointmentId", "value": "{{appointmentId}}", "enabled": true }
+            ],
+            "auth": { "type": "none" },
+            "body": {
+              "type": "text",
+              "text": {
+                "format": "application/json",
+                "value": "{\n  \"doctorId\": \"{{doctorId}}\",\n  \"schedule\": \"2027-01-15T11:00:00.000Z\",\n  \"note\": \"Confirmed by staff\"\n}"
+              }
+            }
+          },
+          {
+            "name": "Cancel appointment",
+            "method": "PATCH",
+            "url": "{{baseUrl}}/appointments/:appointmentId/cancel",
+            "headers": [{ "name": "X-Requested-With", "value": "fetch", "enabled": true }],
+            "queryParams": [],
+            "pathParams": [
+              { "name": "appointmentId", "value": "{{appointmentId}}", "enabled": true }
+            ],
+            "auth": { "type": "none" },
+            "body": {
+              "type": "text",
+              "text": {
+                "format": "application/json",
+                "value": "{\n  \"cancellationReason\": \"Patient requested a different date\"\n}"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "name": "Files",
+        "auth": { "type": "none" },
+        "requests": [
+          {
+            "name": "Upload document",
+            "method": "POST",
+            "url": "{{baseUrl}}/files",
+            "headers": [{ "name": "X-Requested-With", "value": "fetch", "enabled": true }],
+            "queryParams": [],
+            "pathParams": [],
+            "auth": { "type": "none" },
+            "body": {
+              "type": "form",
+              "form": {
+                "isMultipart": true,
+                "fields": [
+                  {
+                    "name": "file",
+                    "type": "file",
+                    "file": { "name": "sample-document.pdf" },
+                    "enabled": true
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "name": "Issue download URL",
+            "method": "GET",
+            "url": "{{baseUrl}}/files/:fileId/url",
+            "headers": [],
+            "queryParams": [],
+            "pathParams": [{ "name": "fileId", "value": "{{fileId}}", "enabled": true }],
+            "auth": { "type": "none" },
+            "body": { "type": "none" }
+          },
+          {
+            "name": "Download document",
+            "method": "GET",
+            "url": "{{baseUrl}}/files/:fileId/download",
+            "headers": [],
+            "queryParams": [{ "name": "token", "value": "{{downloadToken}}", "enabled": true }],
+            "pathParams": [{ "name": "fileId", "value": "{{fileId}}", "enabled": true }],
+            "auth": { "type": "none" },
+            "body": { "type": "none" }
+          }
+        ]
+      },
+      {
+        "name": "Notifications",
+        "auth": { "type": "none" },
+        "requests": [
+          {
+            "name": "My inbox",
+            "method": "GET",
+            "url": "{{baseUrl}}/notifications",
+            "headers": [],
+            "queryParams": [
+              { "name": "page", "value": "1", "enabled": true },
+              { "name": "limit", "value": "20", "enabled": true },
+              { "name": "unread", "value": "false", "enabled": true }
+            ],
+            "pathParams": [],
+            "auth": { "type": "none" },
+            "body": { "type": "none" }
+          },
+          {
+            "name": "My preferences",
+            "method": "GET",
+            "url": "{{baseUrl}}/notifications/preferences",
+            "headers": [],
+            "queryParams": [],
+            "pathParams": [],
+            "auth": { "type": "none" },
+            "body": { "type": "none" }
+          },
+          {
+            "name": "Update preferences",
+            "method": "PUT",
+            "url": "{{baseUrl}}/notifications/preferences",
+            "headers": [{ "name": "X-Requested-With", "value": "fetch", "enabled": true }],
+            "queryParams": [],
+            "pathParams": [],
+            "auth": { "type": "none" },
+            "body": { "type": "text", "text": { "format": "application/json", "value": "[]" } }
+          },
+          {
+            "name": "Mark all read",
+            "method": "POST",
+            "url": "{{baseUrl}}/notifications/read-all",
+            "headers": [{ "name": "X-Requested-With", "value": "fetch", "enabled": true }],
+            "queryParams": [],
+            "pathParams": [],
+            "auth": { "type": "none" },
+            "body": { "type": "none" }
+          },
+          {
+            "name": "Mark notification read",
+            "method": "PATCH",
+            "url": "{{baseUrl}}/notifications/:notificationId/read",
+            "headers": [{ "name": "X-Requested-With", "value": "fetch", "enabled": true }],
+            "queryParams": [],
+            "pathParams": [
+              { "name": "notificationId", "value": "{{notificationId}}", "enabled": true }
+            ],
+            "auth": { "type": "none" },
+            "body": { "type": "none" }
+          }
+        ]
+      },
+      {
+        "name": "Documentation",
+        "auth": { "type": "none" },
+        "requests": [
+          {
+            "name": "Swagger UI",
+            "method": "GET",
+            "url": "{{baseUrl}}/docs",
+            "headers": [],
+            "queryParams": [],
+            "pathParams": [],
+            "auth": { "type": "none" },
+            "body": { "type": "none" }
+          },
+          {
+            "name": "OpenAPI JSON",
+            "method": "GET",
+            "url": "{{baseUrl}}/docs/openapi.json",
+            "headers": [],
+            "queryParams": [],
+            "pathParams": [],
+            "auth": { "type": "none" },
+            "body": { "type": "none" }
+          }
+        ]
+      }
+    ],
+    "drafts": [],
+    "environments": [
+      {
+        "name": "Local",
+        "isDefault": true,
+        "isLocalOnly": true,
+        "variables": [
+          { "name": "baseUrl", "value": "http://localhost:4000/api/v1", "isSecret": false },
+          { "name": "adminEmail", "value": "", "isSecret": false },
+          { "name": "adminPassword", "value": "", "isSecret": true },
+          { "name": "userId", "value": "00000000-0000-0000-0000-000000000000", "isSecret": false },
+          {
+            "name": "doctorId",
+            "value": "00000000-0000-0000-0000-000000000000",
+            "isSecret": false
+          },
+          {
+            "name": "patientId",
+            "value": "00000000-0000-0000-0000-000000000000",
+            "isSecret": false
+          },
+          {
+            "name": "appointmentId",
+            "value": "00000000-0000-0000-0000-000000000000",
+            "isSecret": false
+          },
+          { "name": "fileId", "value": "00000000-0000-0000-0000-000000000000", "isSecret": false },
+          {
+            "name": "notificationId",
+            "value": "00000000-0000-0000-0000-000000000000",
+            "isSecret": false
+          },
+          { "name": "patientOtp", "value": "000000", "isSecret": true },
+          { "name": "phoneOtp", "value": "000000", "isSecret": true },
+          { "name": "resetToken", "value": "replace-with-token-from-mailpit", "isSecret": true },
+          {
+            "name": "downloadToken",
+            "value": "replace-with-token-from-url-response",
+            "isSecret": true
+          }
+        ]
+      }
+    ]
+  }
+}
