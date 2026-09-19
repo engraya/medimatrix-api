@@ -2,13 +2,23 @@ FROM node:24-alpine AS build
 WORKDIR /app
 RUN apk add --no-cache openssl
 COPY package*.json ./
-RUN test -f package-lock.json && npm ci
+# Retain downloaded packages across builds, including interrupted installs.
+RUN --mount=type=cache,target=/root/.npm \
+    test -f package-lock.json && npm ci --prefer-offline --no-audit --no-fund \
+    --fetch-retries=5
 COPY . .
-RUN DATABASE_URL=postgresql://build:build@localhost:5432/build npx prisma generate
+# prisma.config.ts loads app validation; generation needs no live services.
+# These placeholders apply only to this command, never to the runtime environment.
+RUN POSTGRES_PASSWORD=build-only \
+    JWT_SECRET=build-only-placeholder-not-for-runtime \
+    OTP_PEPPER=build-only-placeholder-not-for-runtime \
+    STORAGE_PROVIDER=local \
+    npx prisma generate
 RUN npm run build
 
 FROM build AS production-deps
-RUN npm prune --omit=dev
+RUN --mount=type=cache,target=/root/.npm \
+    npm prune --omit=dev --prefer-offline --no-audit --no-fund --fetch-retries=5
 
 # Migration image keeps the CLI and the engine downloaded in the build stage.
 FROM build AS migrate
