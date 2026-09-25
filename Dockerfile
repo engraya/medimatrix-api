@@ -1,4 +1,4 @@
-FROM node:24-alpine AS build
+FROM node:25-alpine AS build
 WORKDIR /app
 RUN apk add --no-cache openssl
 COPY package*.json ./
@@ -25,7 +25,7 @@ FROM build AS migrate
 USER node
 ENTRYPOINT ["node", "dist/scripts/db/env.js", "migrate", "deploy"]
 
-FROM node:24-alpine AS runner
+FROM node:25-alpine AS runner
 WORKDIR /app
 RUN apk add --no-cache openssl
 ENV NODE_ENV=production
