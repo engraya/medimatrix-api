@@ -1,0 +1,45 @@
+{
+  "default_branch": "main",
+  "branches": [
+    "dependabot/docker/node-25-alpine",
+    "dependabot/github_actions/actions/checkout-7",
+    "dependabot/github_actions/actions/setup-node-7",
+    "dependabot/github_actions/actions/upload-artifact-7",
+    "dependabot/github_actions/docker/build-push-action-7",
+    "dependabot/github_actions/docker/login-action-4",
+    "dependabot/npm_and_yarn/eslint-10.10.0",
+    "dependabot/npm_and_yarn/eslint/js-10.0.1",
+    "dependabot/npm_and_yarn/multi-b251156d90",
+    "dependabot/npm_and_yarn/resend-6.28.1",
+    "dependabot/npm_and_yarn/types/multer-2.2.0",
+    "main"
+  ],
+  "parent": {
+    "dependabot/docker/node-25-alpine": "main",
+    "dependabot/github_actions/actions/checkout-7": "main",
+    "dependabot/github_actions/actions/setup-node-7": "main",
+    "dependabot/github_actions/actions/upload-artifact-7": "main",
+    "dependabot/github_actions/docker/build-push-action-7": "main",
+    "dependabot/github_actions/docker/login-action-4": "main",
+    "dependabot/npm_and_yarn/eslint-10.10.0": "main",
+    "dependabot/npm_and_yarn/eslint/js-10.0.1": "main",
+    "dependabot/npm_and_yarn/multi-b251156d90": "main",
+    "dependabot/npm_and_yarn/resend-6.28.1": "main",
+    "dependabot/npm_and_yarn/types/multer-2.2.0": "main",
+    "main": null
+  },
+  "order": [
+    "main",
+    "dependabot/docker/node-25-alpine",
+    "dependabot/github_actions/actions/checkout-7",
+    "dependabot/github_actions/actions/setup-node-7",
+    "dependabot/github_actions/actions/upload-artifact-7",
+    "dependabot/github_actions/docker/build-push-action-7",
+    "dependabot/github_actions/docker/login-action-4",
+    "dependabot/npm_and_yarn/eslint-10.10.0",
+    "dependabot/npm_and_yarn/eslint/js-10.0.1",
+    "dependabot/npm_and_yarn/multi-b251156d90",
+    "dependabot/npm_and_yarn/resend-6.28.1",
+    "dependabot/npm_and_yarn/types/multer-2.2.0"
+  ]
+}
